@@ -1,0 +1,25 @@
+From 7306d1cfef1dccf1068d1f0827399cb76ca848f1 Mon Sep 17 00:00:00 2001
+From: Umer Uddin <umer.uddin@mentallysanemainliners.org>
+Date: Mon, 17 Feb 2025 17:06:45 +0000
+Subject: [PATCH] kernel: gen_kheaders.sh: Use system CPIO
+
+---
+ kernel/gen_kheaders.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/gen_kheaders.sh b/kernel/gen_kheaders.sh
+index 7a54d4d34..71219a555 100755
+--- a/kernel/gen_kheaders.sh
++++ b/kernel/gen_kheaders.sh
+@@ -8,7 +8,7 @@ sfile="$(readlink -f "$0")"
+ outdir="$(pwd)"
+ tarfile=$1
+ cpio_dir=$outdir/$tarfile.tmp
+-cpio=$KBUILD_SRC/tools/build/cpio
++cpio=cpio
+ 
+ dir_list="
+ include/
+-- 
+2.47.2
+

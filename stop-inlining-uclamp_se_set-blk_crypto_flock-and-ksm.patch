@@ -1,0 +1,97 @@
+From 4be654180a56539e58b918f6cf2a646734985517 Mon Sep 17 00:00:00 2001
+From: Umer Uddin <umer.uddin@mentallysanemainliners.org>
+Date: Mon, 17 Feb 2025 17:26:32 +0000
+Subject: [PATCH] Stop inlining uclamp_se_set, blk_crypto_flock and ksm_flock
+
+---
+ block/blk-crypto.c              | 2 +-
+ block/keyslot-manager.c         | 2 +-
+ include/linux/blk-crypto.h      | 2 +-
+ include/linux/keyslot-manager.h | 2 +-
+ kernel/sched/core.c             | 2 +-
+ kernel/sched/sched.h            | 4 ++--
+ 6 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/block/blk-crypto.c b/block/blk-crypto.c
+index f15ed0b70..703700d9b 100644
+--- a/block/blk-crypto.c
++++ b/block/blk-crypto.c
+@@ -305,7 +305,7 @@ int blk_crypto_evict_key(struct request_queue *q,
+ }
+ EXPORT_SYMBOL_GPL(blk_crypto_evict_key);
+ 
+-inline void blk_crypto_flock(struct keyslot_manager *ksm, unsigned int flags)
++void blk_crypto_flock(struct keyslot_manager *ksm, unsigned int flags)
+ {
+ 	ksm_flock(ksm, flags);
+ }
+diff --git a/block/keyslot-manager.c b/block/keyslot-manager.c
+index ef3ca04f9..76ecb16be 100644
+--- a/block/keyslot-manager.c
++++ b/block/keyslot-manager.c
+@@ -680,7 +680,7 @@ EXPORT_SYMBOL_GPL(keyslot_manager_derive_raw_secret);
+  * detection, set another lock sub-class could avoid it.
+  *
+  */
+-inline void ksm_flock(struct keyslot_manager *ksm, unsigned int flags)
++void ksm_flock(struct keyslot_manager *ksm, unsigned int flags)
+ {
+ 	ksm->lock_flags = flags;
+ }
+diff --git a/include/linux/blk-crypto.h b/include/linux/blk-crypto.h
+index 13c45efa7..6f6b3e90f 100644
+--- a/include/linux/blk-crypto.h
++++ b/include/linux/blk-crypto.h
+@@ -30,7 +30,7 @@ int blk_crypto_start_using_mode(enum blk_crypto_mode_num crypto_mode,
+ int blk_crypto_evict_key(struct request_queue *q,
+ 			 const struct blk_crypto_key *key);
+ 
+-inline void blk_crypto_flock(struct keyslot_manager *ksm, unsigned int flags);
++void blk_crypto_flock(struct keyslot_manager *ksm, unsigned int flags);
+ 
+ 
+ #else /* CONFIG_BLK_INLINE_ENCRYPTION */
+diff --git a/include/linux/keyslot-manager.h b/include/linux/keyslot-manager.h
+index e247be8a5..631d8e311 100644
+--- a/include/linux/keyslot-manager.h
++++ b/include/linux/keyslot-manager.h
+@@ -98,7 +98,7 @@ int keyslot_manager_derive_raw_secret(struct keyslot_manager *ksm,
+ 				      unsigned int wrapped_key_size,
+ 				      u8 *secret, unsigned int secret_size);
+ 
+-inline void ksm_flock(struct keyslot_manager *ksm, unsigned int flags);
++void ksm_flock(struct keyslot_manager *ksm, unsigned int flags);
+ 
+ #endif /* CONFIG_BLK_INLINE_ENCRYPTION */
+ 
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 03f21fda3..b1202fc42 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -752,7 +752,7 @@ unsigned int sysctl_sched_uclamp_util_max = SCHED_CAPACITY_SCALE;
+ /* All clamps are required to be less or equal than these values */
+ static struct uclamp_se uclamp_default[UCLAMP_CNT];
+ 
+-inline void uclamp_se_set(struct uclamp_se *uc_se,
++void uclamp_se_set(struct uclamp_se *uc_se,
+ 				 unsigned int value, bool user_defined)
+ {
+ 	uc_se->value = value;
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 3ff6b2f30..da67c09b1 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2343,8 +2343,8 @@ static inline void cpufreq_update_util(struct rq *rq, unsigned int flags) {}
+ extern struct mutex uclamp_mutex;
+ 
+ unsigned long uclamp_eff_value(struct task_struct *p, enum uclamp_id clamp_id);
+-inline void uclamp_se_set(struct uclamp_se *uc_se,
+-				 unsigned int value, bool user_defined);
++void uclamp_se_set(struct uclamp_se *uc_se,
++			  unsigned int value, bool user_defined);
+ void
+ uclamp_update_active_tasks(struct cgroup_subsys_state *css,
+ 			   unsigned int clamps);
+-- 
+2.47.2
+
