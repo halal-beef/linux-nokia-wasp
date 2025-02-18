@@ -27,13 +27,12 @@ makedepends="
 
 # Source
 _repository="android_kernel_nokia_mt6761"
-_commit="a375ccc0084cca14be53a440d482c778734c0176"
+_commit="8cfc500010d0daa96032ddd86e0c3ebe9aacb8d7"
 _config="config-$_flavor.$arch"
 source="
 	$pkgname-$_commit.tar.gz::https://github.com/nokia-mt6761-devs/$_repository/archive/$_commit.tar.gz
 	$_config
 	edit-selinux-generated-headers.patch
-	fix-mkdtboimg-permissions.patch
 	stop-inlining-uclamp_se_set-blk_crypto_flock-and-ksm.patch
 	use_system_cpio.patch
 "
@@ -78,10 +77,9 @@ package() {
 }
 
 sha512sums="
-311236faea81db02d6d5a7d6ec4dfd1bd16a989f30ffa6ecec981e6e0466c8b29aaf1b7bb7303be5d27d67509c667161c4af534cf6acc09e3e20386562e97543  linux-nokia-wasp-a375ccc0084cca14be53a440d482c778734c0176.tar.gz
-3fe6c9b8715da525c04f18aec67e7889cd36eba7d8525a19b335ca2215fac54a16118cebc3e506e97212681f215a3ec3569a986e8ed6b2412b964d1e983b3937  config-nokia-wasp.aarch64
+277f21461f9b9047975e04bf4db5b56f251c1069affbfcae3a23ff68c4fcca70ce016aacb33969fb32f275fceea962eaf7a5c626318b8079ab50687fd2531bf2  linux-nokia-wasp-8cfc500010d0daa96032ddd86e0c3ebe9aacb8d7.tar.gz
+e97c2067343736ad417830233167a5ba252c379b655d27b38c3d9b614f3659a458adcf3fa08e78c5d3686bf46a4faef5e7455acf41ca7cdedc7066c96dc50d6b  config-nokia-wasp.aarch64
 fc8f36d3106ad6306d4f07db83d26f0d57e92c29440a6d25271295a894017b82f0f1da2568b399d3bdc13677bb894ba635e013c39f4a9466a28851e7c0e21c48  edit-selinux-generated-headers.patch
-defd76481eb952e8143971dbccc73e262c67e469b69896d1c2c9e7d1d3011ac02e7e99192854188ad04d61defe43884ed41a302956e9be601437464a57a260f2  fix-mkdtboimg-permissions.patch
 e8c4302e671ad187348bd54eedb81cf3a0c5d368066ab872295936c102ac1d6024ed5fbbea5386b04270c75bb0948cfc51d3b2febb4a4daa5e051643db67b909  stop-inlining-uclamp_se_set-blk_crypto_flock-and-ksm.patch
 48c0728018a58229e2af7756ce5f1a8b98d38d36857539529a1d0d834a96a0edb95e46390d8a947a61e957811259a11cdc21b3b0d117da254683f4a393080048  use_system_cpio.patch
 "
